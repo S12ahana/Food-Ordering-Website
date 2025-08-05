@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Menu Page</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header>
+		<h1>Our Menu</h1>
+	</header>
+	<main>
+		<section class="menu-section">
+			<h2>Appetizers</h2>
+			<ul>
+				<li>
+					<span class="dish-name">Bruschetta</span>
+					<span class="price">$8.99</span>
+					<p>Grilled bread with fresh tomatoes and basil</p>
+				</li>
+				<li>
+					<span class="dish-name">Spinach and Artichoke Dip</span>
+					<span class="price">$10.99</span>
+					<p>Served with tortilla chips and pita bread</p>
+				</li>
+			</ul>
+		</section>
+		<section class="menu-section">
+			<h2>Entrees</h2>
+			<ul>
+				<li>
+					<span class="dish-name">Grilled Chicken Breast</span>
+					<span class="price">$14.99</span>
+					<p>Served with roasted vegetables and quinoa</p>
+				</li>
+				<li>
+					<span class="dish-name">Pan-Seared Salmon</span>
+					<span class="price">$19.99</span>
+					<p>Served with garlic mashed potatoes and steamed broccoli</p>
+				</li>
+			</ul>
+		</section>
+		<section class="menu-section">
+			<h2>Desserts</h2>
+			<ul>
+				<li>
+					<span class="dish-name">Chocolate Lava Cake</span>
+					<span class="price">$7.99</span>
+					<p>Served with vanilla ice cream</p>
+				</li>
+				<li>
+					<span class="dish-name">Cheesecake</span>
+					<span class="price">$8.99</span>
+					<p>Served with strawberry sauce</p>
+				</li>
+			</ul>
+		</section>
+        <section class="menu-section">
+			<h2>Drinks</h2>
+			<ul>
+				<li>
+					<span class="dish-name">Tuscan Sunset</span>
+					<span class="price">$4.99</span>
+					<p>plain citrus delight with a hunch of magic</p>
+				</li>
+				<li>
+					<span class="dish-name">Italian Stallion</span>
+					<span class="price">$12.99</span>
+					<p>coffee with expresso, milk and hazelnut syrup</p>
+				</li>
+                <li>
+					<span class="dish-name">Venetian Velve</span>
+					<span class="price">$14.99</span>
+					<p>A luxurious and creamy hot chocolate, made with dark chocolate, steamed milk, hint of vanilla, whipped cream, chocolate shavings.</p>
+				</li>
+			</ul>
+		</section>
+	
+	<script>
+	document.querySelectorAll('.menu-section li').forEach(item => {
+	item.addEventListener('click', async () => {
+		const name = prompt("Enter your name:");
+		const address = prompt("Enter your address:");
+		const itemName = item.querySelector('.dish-name').textContent;
+		const priceText = item.querySelector('.price').textContent;
+		const price = parseFloat(priceText.replace('$', ''));
+
+		if (!name || !address) {
+			alert("Please provide both name and address.");
+			return;
+		}
+
+		const order = {
+			name: name,
+			items: [itemName],
+			totalPrice: price,
+			address: address
+		};
+
+		const res = await fetch('http://localhost:5000/api/orders', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(order)
+		});
+
+		const data = await res.json();
+		alert('Order placed successfully!');
+	});
+});
+</script>
+</main>
+</body>
+</html>
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Place Order</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fff0f0;
+      padding: 2em;
+    }
+    .form-container {
+      background: #fff;
+      padding: 2em;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #c0392b;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 1em;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.8em;
+      margin-top: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 1.5em;
+      padding: 0.8em;
+      width: 100%;
+      background-color: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Order <span id="dish-name"></span></h2>
+    <form id="orderForm">
+      <label>Name:</label>
+      <input type="text" name="name" required>
+      
+      <label>Address:</label>
+      <textarea name="address" required></textarea>
+
+      <input type="hidden" name="dish" id="dishInput">
+
+      <button type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <script>
+  // Get dish name and price from query string
+  const urlParams = new URLSearchParams(window.location.search);
+  const dish = urlParams.get('dish');
+  const price = urlParams.get('price');
+
+  document.getElementById('dish-name').textContent = `${dish} - $${price}`;
+  document.getElementById('dishInput').value = dish;
+
+  // Handle form submit
+  document.getElementById('orderForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const order = {
+      name: data.name,
+      address: data.address,
+      items: [data.dish],
+      totalPrice: parseFloat(price)
+    };
+
+    const response = await fetch('http://localhost:5000/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(order)
+    });
+
+    if (response.ok) {
+      alert("Order placed successfully!");
+      window.location.href = 'index.html';
+    } else {
+      alert("Error placing order.");
+    }
+  });
+</script>
+/*
+  <script>
+    // Get dish name from URL query param
+    const urlParams = new URLSearchParams(window.location.search);
+    const dish = urlParams.get('dish');
+    document.getElementById('dish-name').textContent = dish;
+    document.getElementById('dishInput').value = dish;
+
+    //Handle form submit
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      const response = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        alert("Order placed successfully!");
+        window.location.href = 'index.html';
+      } else {
+        alert("Error placing order.");
+      }
+    });
+  </script>*/
+</body>
+</html>

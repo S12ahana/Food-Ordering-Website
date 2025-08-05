@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Menu Page</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header>
+		<h1>Our Menu</h1>
+	</header>
+	<main>
+		<section class="menu-section">
+  <h2>Appetizers</h2>
+  <ul>
+    <li>
+      <span class="dish-name">Bruschetta</span>
+      <span class="price">$8.99</span>
+      <p>Grilled bread with fresh tomatoes and basil</p>
+    </li>
+    <li>
+      <span class="dish-name">Spinach and Artichoke Dip</span>
+      <span class="price">$10.99</span>
+      <p>Served with tortilla chips and pita bread</p>
+    </li>
+    <li>
+      <span class="dish-name">Garlic Parmesan Wings</span>
+      <span class="price">$9.99</span>
+      <p>Crispy wings tossed in garlic and parmesan</p>
+    </li>
+    <li>
+      <span class="dish-name">Stuffed Mushrooms</span>
+      <span class="price">$11.49</span>
+      <p>Mushroom caps filled with cheese and herbs</p>
+    </li>
+  </ul>
+</section>
+
+<section class="menu-section">
+  <h2>Entrees</h2>
+  <ul>
+    <li>
+      <span class="dish-name">Grilled Chicken Breast</span>
+      <span class="price">$14.99</span>
+      <p>Served with roasted vegetables and quinoa</p>
+    </li>
+    <li>
+      <span class="dish-name">Pan-Seared Salmon</span>
+      <span class="price">$19.99</span>
+      <p>Served with garlic mashed potatoes and steamed broccoli</p>
+    </li>
+    <li>
+      <span class="dish-name">Beef Lasagna</span>
+      <span class="price">$16.99</span>
+      <p>Layered pasta with ground beef, ricotta, and mozzarella</p>
+    </li>
+    <li>
+      <span class="dish-name">Vegetarian Risotto</span>
+      <span class="price">$13.99</span>
+      <p>Rich risotto with mushrooms, peas, and truffle oil</p>
+    </li>
+  </ul>
+</section>
+
+<section class="menu-section">
+  <h2>Desserts</h2>
+  <ul>
+    <li>
+      <span class="dish-name">Chocolate Lava Cake</span>
+      <span class="price">$7.99</span>
+      <p>Served with vanilla ice cream</p>
+    </li>
+    <li>
+      <span class="dish-name">Cheesecake</span>
+      <span class="price">$8.99</span>
+      <p>Served with strawberry sauce</p>
+    </li>
+    <li>
+      <span class="dish-name">Tiramisu</span>
+      <span class="price">$9.49</span>
+      <p>Classic Italian dessert with coffee-soaked layers</p>
+    </li>
+    <li>
+      <span class="dish-name">Panna Cotta</span>
+      <span class="price">$8.49</span>
+      <p>Silky smooth vanilla cream topped with berry coulis</p>
+    </li>
+  </ul>
+</section>
+
+<section class="menu-section">
+  <h2>Drinks</h2>
+  <ul>
+    <li>
+		<li onclick="goToOrderPage('Pizza', 250)"></li>
+      	<span class="dish-name">Tuscan Sunset</span>
+      	<span class="price">$4.99</span>
+      	<p>Plain citrus delight with a hunch of magic</p>
+    </li>
+    <li>
+      <span class="dish-name">Italian Stallion</span>
+      <span class="price">$12.99</span>
+      <p>Coffee with espresso, milk, and hazelnut syrup</p>
+    </li>
+    <li>
+      <span class="dish-name">Venetian Velvet</span>
+      <span class="price">$14.99</span>
+      <p>Luxurious dark chocolate, vanilla, and whipped cream</p>
+    </li>
+    <li>
+      <span class="dish-name">Limoncello Sparkle</span>
+      <span class="price">$5.99</span>
+      <p>Refreshing lemon soda with mint and lime</p>
+    </li>
+    <li>
+      <span class="dish-name">Espresso Macchiato</span>
+      <span class="price">$3.99</span>
+      <p>Strong espresso with a dollop of frothy milk</p>
+    </li>
+  </ul>
+</section>
+
+	
+	<script>
+	document.querySelectorAll('.menu-section li').forEach(item => {
+	item.addEventListener('click', async () => {
+		const name = prompt("Enter your name:");
+		const address = prompt("Enter your address:");
+		const itemName = item.querySelector('.dish-name').textContent;
+		const priceText = item.querySelector('.price').textContent;
+		const price = parseFloat(priceText.replace('$', ''));
+
+		if (!name || !address) {
+			alert("Please provide both name and address.");
+			return;
+		}
+
+		const order = {
+			name: name,
+			items: [itemName],
+			totalPrice: price,
+			address: address
+		};
+
+		const res = await fetch('http://localhost:5000/api/orders', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(order)
+		});
+
+		const data = await res.json();
+		alert('Order placed successfully!');
+	});
+});
+</script>
+</main>
+</body>
+</html>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff9f5;
+        color: #333;
+    }
+
+    header {
+        background: linear-gradient(135deg, #6e1414, #a63232);
+        color: #fff;
+        padding: 1.5em 0;
+        text-align: center;
+        font-family: 'Georgia', serif;
+        letter-spacing: 2px;
+        font-size: 1.8em;
+        text-transform: uppercase;
+    }
+
+    .menu-section {
+        background-color: #ffe5e0;
+        padding: 3em 2em;
+        margin: 30px auto;
+        border-radius: 12px;
+        width: 85%;
+        max-width: 900px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-section h2 {
+        font-size: 28px;
+        color: #8b1e3f;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #c75b70;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 30px;
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 10px;
+        transition: transform 0.2s ease;
+        box-shadow: 0 4px 12px rgba(198, 91, 112, 0.15);
+    }
+
+    li:hover {
+        transform: scale(1.02);
+    }
+
+    .dish-name {
+        display: block;
+        font-weight: 600;
+        font-size: 20px;
+        color: #3c0f0f;
+    }
+
+    .price {
+        float: right;
+        font-size: 18px;
+        color: #8b1e3f;
+        font-weight: bold;
+    }
+
+    li p {
+        margin: 8px 0 0;
+        font-size: 15px;
+        color: #5c5c5c;
+        font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+        .menu-section {
+            padding: 2em 1em;
+        }
+
+        .dish-name,
+        .price {
+            font-size: 18px;
+        }
+    }
+</style>
+
+

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>ContactUs</title>
+</head>
+
+<style>
+    body {
+        font-size: 30px;
+        background-image: linear-gradient(pink, rgb(152, 152, 239));
+    }
+
+    .large-button {
+        font-size: 18px;
+        padding: 15px 30px;
+    }
+
+    .large-button:hover {
+        background-color: green;
+    }
+
+    .small-button {
+        font-size: 18px;
+        padding: 15px 30px;
+    }
+
+    .small-button:hover {
+        background-color: red;
+    }
+</style>
+
+<body>
+    <div id="ContactUs">
+        <h1>Contact Us</h1>
+        <form onsubmit="submitForm(event)">
+            <div class="form-shape">
+                <label for="query">Type of Query</label>
+                <select name="myQuery" id="query">
+                    <option value="sel" selected>Select</option>
+                    <option value="ord">Order related Issues</option>
+                    <option value="Site">Site related Issues</option>
+                    <option value="fed">Complaint related Issues</option>
+                    <option value="others">Others</option>
+                </select>
+            </div>
+
+            <div class="form-shape">
+                <label for="name">Name</label>
+                <input type="text" name="myName" id="name" placeholder="Enter your Name">
+            </div>
+
+            <div class="form-shape">
+                <label for="email">Email-Id</label>
+                <input type="email" name="myEmail" id="email" placeholder="Enter your email">
+            </div>
+
+            <div class="form-shape">
+                <label for="pho">Phone Number</label>
+                <input type="tel" name="myPhone" id="pho" placeholder="Enter your Phone no">
+            </div>
+
+            <div id="radio">
+                Are you a member of OnlineFoodShop:
+                Yes <input type="radio" name="eligible" value="yes">
+                No <input type="radio" name="eligible" value="no">
+            </div>
+
+            <div class="form-shape">
+                <label for="message">Elaborate your query</label>
+                <textarea name="mesg" id="message" cols="30" rows="10"></textarea>
+            </div>
+
+            <div class="button">
+                <button type="submit" class="large-button">Submit</button>
+                <button type="reset" class="small-button">Reset</button>
+            </div>
+        </form>
+    </div>
+    <scr
+    function submitForm(event) {
+    event.preventDefault();
+
+    const data = {
+        queryType: document.getElementById('query').value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('pho').value,
+        isMember: document.querySelector('input[name="eligible"]:checked')?.value || '',
+        message: document.getElementById('message').value.trim()
+    };
+
+    fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(resData => {
+        // ✅ This should now work correctly
+        alert(resData.message || "Submission complete.");
+        document.querySelector('form').reset();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Submission failed");
+    });
+}
+
+</body>
+
+</html>
